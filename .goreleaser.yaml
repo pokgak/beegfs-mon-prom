@@ -48,7 +48,7 @@ nfpms:
       - deb
       - rpm
     dependencies:
-      - beegfs-utils
+      - beegfs-mgmtd
     bindir: /usr/bin
     contents:
       - src: packaging/systemd/beegfs-mon-prom.service

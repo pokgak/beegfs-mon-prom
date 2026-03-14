@@ -14,8 +14,11 @@ import (
 
 func main() {
 	listenAddr := flag.String("listen", ":9100", "address to listen on")
-	cfgFile := flag.String("config", "", "path to beegfs-mon.conf (uses default beegfs-ctl discovery if empty)")
-	mgmtHost := flag.String("mgmtd", "", "management daemon host:port (e.g. 10.0.0.1:8008)")
+	beegfsPath := flag.String("beegfs-path", "/opt/beegfs/sbin/beegfs", "path to beegfs CLI binary")
+	mgmtdAddr := flag.String("mgmtd-addr", "", "management daemon gRPC address (e.g. 10.0.0.1:8010)")
+	authFile := flag.String("auth-file", "", "path to BeeGFS auth file")
+	tlsDisable := flag.Bool("tls-disable", false, "disable TLS for gRPC communication")
+	tlsCertFile := flag.String("tls-cert-file", "", "path to TLS certificate file")
 	interval := flag.Duration("interval", 30*time.Second, "collection interval for cached metrics")
 	flag.Parse()
 
@@ -23,9 +26,12 @@ func main() {
 	slog.SetDefault(logger)
 
 	cfg := collector.Config{
-		CfgFile:  *cfgFile,
-		MgmtHost: *mgmtHost,
-		Interval: *interval,
+		BeegfsPath:  *beegfsPath,
+		MgmtdAddr:   *mgmtdAddr,
+		AuthFile:     *authFile,
+		TLSDisable:   *tlsDisable,
+		TLSCertFile:  *tlsCertFile,
+		Interval:     *interval,
 	}
 
 	c := collector.New(cfg)
