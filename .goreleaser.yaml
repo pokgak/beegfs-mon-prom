@@ -1,0 +1,77 @@
+version: 2
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}}
+
+dockers:
+  - image_templates:
+      - "ghcr.io/pokgak/beegfs-mon-prom:{{ .Tag }}-amd64"
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/amd64"
+    dockerfile: Dockerfile.goreleaser
+    goarch: amd64
+  - image_templates:
+      - "ghcr.io/pokgak/beegfs-mon-prom:{{ .Tag }}-arm64"
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/arm64"
+    dockerfile: Dockerfile.goreleaser
+    goarch: arm64
+
+docker_manifests:
+  - name_template: "ghcr.io/pokgak/beegfs-mon-prom:{{ .Tag }}"
+    image_templates:
+      - "ghcr.io/pokgak/beegfs-mon-prom:{{ .Tag }}-amd64"
+      - "ghcr.io/pokgak/beegfs-mon-prom:{{ .Tag }}-arm64"
+  - name_template: "ghcr.io/pokgak/beegfs-mon-prom:latest"
+    image_templates:
+      - "ghcr.io/pokgak/beegfs-mon-prom:{{ .Tag }}-amd64"
+      - "ghcr.io/pokgak/beegfs-mon-prom:{{ .Tag }}-arm64"
+
+nfpms:
+  - package_name: beegfs-mon-prom
+    vendor: pokgak
+    homepage: https://github.com/pokgak/beegfs-mon-prom
+    maintainer: pokgak
+    description: BeeGFS Prometheus Exporter
+    license: MIT
+    formats:
+      - deb
+      - rpm
+    dependencies:
+      - beegfs-utils
+    bindir: /usr/bin
+    contents:
+      - src: dist/systemd/beegfs-mon-prom.service
+        dst: /lib/systemd/system/beegfs-mon-prom.service
+      - src: dist/default/beegfs-mon-prom
+        dst: /etc/default/beegfs-mon-prom
+        type: config|noreplace
+    scripts:
+      postinstall: dist/scripts/postinstall.sh
+      preremove: dist/scripts/preremove.sh
+
+archives:
+  - formats:
+      - tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"

@@ -1,0 +1,4 @@
+# Arguments passed to beegfs-mon-prom
+# Uncomment and modify as needed
+#BEEGFS_MON_PROM_ARGS="--mgmtd=10.0.0.1:8008 --listen=:9100 --interval=30s"
+BEEGFS_MON_PROM_ARGS="--listen=:9100"

@@ -1,0 +1,21 @@
+[Unit]
+Description=BeeGFS Prometheus Exporter
+Documentation=https://github.com/pokgak/beegfs-mon-prom
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=beegfs-mon-prom
+Group=beegfs-mon-prom
+ExecStart=/usr/bin/beegfs-mon-prom $BEEGFS_MON_PROM_ARGS
+Restart=on-failure
+RestartSec=5
+EnvironmentFile=-/etc/default/beegfs-mon-prom
+LimitNOFILE=65536
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
