@@ -1,3 +1,4 @@
 /beegfs-mon-prom
+/dist/
 *.exe
 .DS_Store

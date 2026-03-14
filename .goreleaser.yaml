@@ -51,14 +51,14 @@ nfpms:
       - beegfs-utils
     bindir: /usr/bin
     contents:
-      - src: dist/systemd/beegfs-mon-prom.service
+      - src: packaging/systemd/beegfs-mon-prom.service
         dst: /lib/systemd/system/beegfs-mon-prom.service
-      - src: dist/default/beegfs-mon-prom
+      - src: packaging/default/beegfs-mon-prom
         dst: /etc/default/beegfs-mon-prom
         type: config|noreplace
     scripts:
-      postinstall: dist/scripts/postinstall.sh
-      preremove: dist/scripts/preremove.sh
+      postinstall: packaging/scripts/postinstall.sh
+      preremove: packaging/scripts/preremove.sh
 
 archives:
   - formats:
