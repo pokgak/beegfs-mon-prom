@@ -68,6 +68,23 @@ archives:
 checksum:
   name_template: checksums.txt
 
+release:
+  header: |
+    ## BeeGFS 8.x Support
+
+    This is a major rewrite that drops BeeGFS 7.x (`beegfs-ctl`) support and uses the new BeeGFS 8.x CLI (`/opt/beegfs/sbin/beegfs`) with native JSON output.
+
+    ### Breaking Changes
+    - Requires BeeGFS 8.x — the `beegfs` CLI binary must be available (default: `/opt/beegfs/sbin/beegfs`)
+    - All metric names have changed (see README for the new metric reference)
+    - CLI flags changed: `--mgmtd` → `--mgmtd-addr`, `--config` removed, new `--auth-file`, `--tls-disable`, `--tls-cert-file`, `--beegfs-path` flags
+
+    ### What's New
+    - JSON-based data collection — no more text scraping, much more reliable
+    - Target reachability metric (`beegfs_target_reachable`)
+    - Unified `node_type` label (meta/storage) instead of separate metric names per node type
+    - Per-target metrics now include both meta and storage targets
+
 changelog:
   sort: asc
   filters:
